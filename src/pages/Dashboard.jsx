@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Intro from "../components/Intro";
 
 //  helper functions
-import { fetchData } from "../helpers"
+import { createBudget, fetchData } from "../helpers"
 import AddBudgetForm from "../components/AddBudgetForm";
 
 // loader
@@ -21,12 +21,29 @@ export function dashboardLoader() {
 // action
 export async function dashboardAction({ request }) {
 	const data = await request.formData();
-	const formData = Object.fromEntries(data)
-	try {
-		localStorage.setItem("userName", JSON.stringify(formData.userName))
-		return toast.success(`Welcome, ${formData.userName}! You're all set up!`)
-	} catch (e) {
-		throw new Error("There was a problem creating your account.")
+	const {_action, ...values} = Object.fromEntries(data)
+
+	// new user submission
+	if(_action === "newUser") {
+		try {
+			localStorage.setItem("userName", JSON.stringify(values.userName))
+			return toast.success(`Welcome, ${values.userName}! You're all set up!`)
+		} catch (e) {
+			throw new Error("There was a problem creating your account.")
+		}
+	}
+
+	// create new budget
+	if (_action === "createBudget") {
+		try {
+			createBudget({
+				name: values.newBudget,
+				amount: values.newBudgetAmount,
+			})
+			return toast.success("Budget created successfully!")	
+		} catch (e) {
+			throw new Error("There was a problem creating your budget.")
+		}
 	}
 }
 
