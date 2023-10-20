@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Intro from "../components/Intro";
 
 //  helper functions
-import { createBudget, fetchData } from "../helpers"
+import { createBudget, fetchData, waait } from "../helpers"
 import AddBudgetForm from "../components/AddBudgetForm";
 
 // loader
@@ -20,6 +20,8 @@ export function dashboardLoader() {
 
 // action
 export async function dashboardAction({ request }) {
+	await waait(2000);
+
 	const data = await request.formData();
 	const {_action, ...values} = Object.fromEntries(data)
 

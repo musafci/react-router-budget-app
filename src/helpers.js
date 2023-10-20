@@ -26,3 +26,6 @@ export const createBudget = ({name, amount}) => {
   export const deleteItem = ({ key }) => {
     return localStorage.removeItem(key)
   }
+
+  // waait
+  export const waait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
