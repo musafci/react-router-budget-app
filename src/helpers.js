@@ -29,3 +29,17 @@ export const createBudget = ({name, amount}) => {
 
   // waait
   export const waait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+  // Create expense
+  export const createExpense = ({name, amount, budgetId}) => {
+    const newItem = {
+      id: crypto.randomUUID(),
+      name: name,
+      createdAt: Date.now(),
+      amount: +amount,
+      budgetId: budgetId,
+    }
+    const existingExpenses = fetchData("expenses") ?? [];
+    return localStorage.setItem("expenses",
+      JSON.stringify([...existingExpenses, newItem]))
+  }
