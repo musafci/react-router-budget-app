@@ -22,11 +22,6 @@ export const createBudget = ({name, amount}) => {
     JSON.stringify([...existingBudgets, newItem]))
 }
 
-  // delete item
-  export const deleteItem = ({ key }) => {
-    return localStorage.removeItem(key)
-  }
-
   // waait
   export const waait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -56,6 +51,22 @@ export const createBudget = ({name, amount}) => {
     }, 0)
     return budgetSpent;
   }
+
+  // Get all items from local storeage
+  export const getAllMatchingItems = ({category, key, value}) => {
+    const data = fetchData(category) ?? [];
+    return data.filter((item) => item[key] === value)
+  }
+
+  // delete item from local storage
+  export const deleteItem = ({ key, id }) => {
+    const existingData = fetchData(key);
+    if (id) {
+      const newData = existingData.filter((item) => item.id !== id);
+      return localStorage.setItem(key, JSON.stringify(newData));
+    }
+    return localStorage.removeItem(key);
+  };
 
   // FORMATTING
   export const formatDateToLocaleString = (epoch) => new Date(epoch).toLocaleDateString();

@@ -11,7 +11,7 @@ import AddExpenseForm from "../components/AddExpenseFrom";
 import BudgetItem from "../components/BudgetItem";
 
 //  helper functions
-import { createBudget, createExpense, fetchData, waait } from "../helpers"
+import { createBudget, createExpense, deleteItem, fetchData, waait } from "../helpers"
 import Table from "../components/Table";
 
 // loader
@@ -24,7 +24,7 @@ export function dashboardLoader() {
 
 // action
 export async function dashboardAction({ request }) {
-	await waait(2000);
+	await waait(1000);
 
 	const data = await request.formData();
 	const {_action, ...values} = Object.fromEntries(data)
@@ -52,7 +52,7 @@ export async function dashboardAction({ request }) {
 		}
 	}
 
-	// create new budget
+	// create new expense
 	if (_action === "createExpense") {
 		try {
 			createExpense({
@@ -63,6 +63,19 @@ export async function dashboardAction({ request }) {
 			return toast.success(`Expense ${values.newExpense} created!`)
 		} catch (e) {
 			throw new Error("There was a problem creating your expense.")
+		}
+	}
+
+	// delete expense
+	if (_action === "deleteExpense") {
+		try {
+			deleteItem({
+				key: "expenses",
+				id: values.expenseId
+			})
+			return toast.success("Expense deleted!")
+		} catch (e) {
+			throw new Error("There was a problem deleting your expense.")
 		}
 	}
 }
